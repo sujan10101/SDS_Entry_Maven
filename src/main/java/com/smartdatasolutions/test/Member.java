@@ -68,7 +68,7 @@ public class Member {
 
 	public String toCSVString( ) {
 		//TODO implement this
-		return null;
+		return String.join(", ", this.id, this.firstName, this.lastName, this.address, this.city, this.zip) + "\n";
 	}
 
 }

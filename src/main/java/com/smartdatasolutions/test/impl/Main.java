@@ -6,15 +6,15 @@ import com.smartdatasolutions.test.MemberFileConverter;
 import com.smartdatasolutions.test.MemberImporter;
 
 import java.io.File;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Main extends MemberFileConverter {
 
 	@Override
 	protected MemberExporter getMemberExporter( ) {
 		// TODO
-		return null;
+		return new MemberExporterImpl();
 	}
 
 	@Override
@@ -27,13 +27,17 @@ public class Main extends MemberFileConverter {
 	protected List< Member > getNonDuplicateMembers( List< Member > membersFromFile ) {
 
 		// TODO
-		return null;
+		Set<Member> uniqueMembers = new TreeSet<>(Comparator.comparing(Member::getId));
+		uniqueMembers.addAll(membersFromFile);
+		return new ArrayList<>(uniqueMembers);
 	}
 
 	@Override
 	protected Map< String, List< Member >> splitMembersByState( List< Member > validMembers ) {
 		// TODO
-		return null;
+		return validMembers.stream()
+				.collect(Collectors.groupingBy(Member::getState));
+
 	}
 
 	public static void main( String[] args ) {
@@ -41,7 +45,7 @@ public class Main extends MemberFileConverter {
 		Main main = new Main();
 
 		try {
-			main.convert(new File("Members.txt"),"./", "Output.csv");
+			main.convert(new File("Members.txt"),"./", "outputFile.csv");
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
